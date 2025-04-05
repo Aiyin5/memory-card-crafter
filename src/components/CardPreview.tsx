@@ -119,7 +119,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({
       
       <Button
         onClick={handleDownload}
-        className="mt-6 flex items-center gap-2 bg-gray-700 hover:bg-gray-600"
+        className="mt-6 flex items-center gap-2 bg-primary hover:bg-primary/90 transition-colors duration-200 rounded-lg shadow-md hover:shadow-lg active:scale-95 transform"
         disabled={!name && !epitaph && !imageUrl}
       >
         <Download size={16} />

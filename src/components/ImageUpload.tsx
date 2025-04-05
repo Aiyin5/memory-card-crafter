@@ -11,7 +11,51 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageChange }) => {
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // 将图像转换为灰度图像
+  const convertToGrayscale = (imageUrl: string): Promise<string> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(imageUrl); // 如果无法获取上下文，返回原始图像
+          return;
+        }
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        // 绘制原始图像
+        ctx.drawImage(img, 0, 0);
+        
+        // 获取图像数据
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        // 应用灰度滤镜
+        for (let i = 0; i < data.length; i += 4) {
+          const gray = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+          data[i] = gray;     // 红色通道
+          data[i + 1] = gray; // 绿色通道
+          data[i + 2] = gray; // 蓝色通道
+          // data[i + 3] 是 alpha 通道，保持不变
+        }
+        
+        // 将处理后的数据放回画布
+        ctx.putImageData(imageData, 0, 0);
+        
+        // 转换为 base64 字符串
+        const grayImageUrl = canvas.toDataURL('image/png');
+        resolve(grayImageUrl);
+      };
+      
+      img.src = imageUrl;
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -21,10 +65,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onImageChange }) => {
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
+    reader.onload = async () => {
       const result = reader.result as string;
-      setPreview(result);
-      onImageChange(result);
+      // 将图像转换为灰度
+      const grayImageUrl = await convertToGrayscale(result);
+      setPreview(grayImageUrl);
+      onImageChange(grayImageUrl);
     };
     reader.readAsDataURL(file);
   };

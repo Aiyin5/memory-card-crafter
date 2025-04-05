@@ -4,13 +4,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
+import { DateScrollPicker } from '@/components/ui/date-scroll-picker';
 
 interface CardFormProps {
   name: string;
@@ -54,7 +54,7 @@ const CardForm: React.FC<CardFormProps> = ({
             <Button
               variant="outline"
               className={cn(
-                "w-full justify-start text-left font-normal bg-secondary/50",
+                "w-full justify-start text-left font-normal bg-secondary/50 border-input",
                 !birthDate && "text-muted-foreground"
               )}
             >
@@ -62,13 +62,13 @@ const CardForm: React.FC<CardFormProps> = ({
               {birthDate ? format(birthDate, 'yyyy年MM月dd日', { locale: zhCN }) : <span>选择出生日期</span>}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="single"
-              selected={birthDate}
-              onSelect={setBirthDate}
-              initialFocus
-              locale={zhCN}
+          <PopoverContent className="w-auto p-0 border border-input shadow-md" align="start">
+            <DateScrollPicker
+              value={birthDate}
+              onChange={setBirthDate}
+              fromYear={1900}
+              toYear={new Date().getFullYear()}
+              className="rounded-md bg-background"
             />
           </PopoverContent>
         </Popover>

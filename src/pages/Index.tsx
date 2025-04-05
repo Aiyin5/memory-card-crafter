@@ -83,7 +83,7 @@ const Index = () => {
                       </Button>
                       <Button 
                         onClick={() => setActiveTab('preview')}
-                        className="bg-gray-700 hover:bg-gray-600"
+                        className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
                       >
                         预览卡片
                       </Button>

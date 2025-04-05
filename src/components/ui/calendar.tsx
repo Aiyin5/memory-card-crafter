@@ -18,6 +18,11 @@ function Calendar({
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{
+        caption_dropdowns: "space-x-1 text-sm font-medium bg-secondary rounded-md p-1",
+        dropdown: "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
+        dropdown_icon: "text-muted-foreground ml-auto h-4 w-4",
+        dropdown_month: "bg-background text-foreground hover:bg-accent hover:text-accent-foreground rounded-md p-2 border border-input min-w-[100px] text-center font-medium shadow-md",
+        dropdown_year: "bg-background text-foreground hover:bg-accent hover:text-accent-foreground rounded-md p-2 border border-input min-w-[100px] text-center font-medium shadow-md",
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
         caption: "flex justify-center pt-1 relative items-center",

@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -96,6 +99,28 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+}
+
+@layer components {
+  .card-template {
+    @apply relative overflow-hidden border rounded-lg shadow-md transition-all duration-300;
+  }
+  
+  .card-classic {
+    @apply bg-white;
+  }
+  
+  .card-modern {
+    @apply bg-epitaph-blue text-gray-800;
+  }
+  
+  .card-elegant {
+    @apply bg-epitaph-cream text-gray-800;
+  }
+  
+  .card-minimal {
+    @apply bg-epitaph-lightGray text-gray-800;
   }
 }

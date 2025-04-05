@@ -4,6 +4,7 @@ interface HtmlGeneratorParams {
   epitaph: string;
   imageUrl: string | null;
   template: string;
+  birthDate?: Date;
 }
 
 export const generateHtml = ({
@@ -11,57 +12,53 @@ export const generateHtml = ({
   epitaph,
   imageUrl,
   template,
+  birthDate,
 }: HtmlGeneratorParams): string => {
   // Base styles based on template
   let styles = '';
   let containerClass = '';
-  let imageClass = '';
   
   switch (template) {
     case 'modern':
       styles = `
-        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        .container { background-color: #D3E4FD; color: #333; }
-        h2 { color: #0E5A8A; }
-        .divider { background-color: #0E5A8A; }
-        .image-container { border: 4px solid white; }
+        body { font-family: 'Playfair Display', serif; margin: 0; padding: 0; background-color: #222; }
+        .container { background-color: #2A3441; color: #e0e0e0; border: 1px solid #444; }
+        h2 { color: #e0e0e0; }
+        .divider { background-color: #666; }
+        .image-container { border: 2px solid #444; }
       `;
       containerClass = 'modern-container';
-      imageClass = 'modern-image';
       break;
     case 'elegant':
       styles = `
-        body { font-family: 'Playfair Display', serif; margin: 0; padding: 0; }
-        .container { background-color: #FDE1D3; color: #333; }
-        h2 { color: #5D4037; }
-        .divider { background-color: #5D4037; }
-        .image-container { border: 2px solid #5D4037; }
+        body { font-family: 'Playfair Display', serif; margin: 0; padding: 0; background-color: #222; }
+        .container { background-color: #1A1A1A; color: #f0f0f0; border: 1px solid #333; }
+        h2 { color: #f0f0f0; }
+        .divider { background-color: #777; }
+        .image-container { border: 2px solid #333; }
       `;
       containerClass = 'elegant-container';
-      imageClass = 'elegant-image';
       break;
     case 'minimal':
       styles = `
-        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        .container { background-color: #F1F0FB; color: #333; }
-        h2 { color: #333; }
-        .divider { background-color: #333; }
-        .image-container { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        body { font-family: 'Inter', sans-serif; margin: 0; padding: 0; background-color: #222; }
+        .container { background-color: #2C2C2C; color: #e0e0e0; border: 1px solid #444; }
+        h2 { color: #e0e0e0; }
+        .divider { background-color: #666; }
+        .image-container { box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
       `;
       containerClass = 'minimal-container';
-      imageClass = 'minimal-image';
       break;
     case 'classic':
     default:
       styles = `
-        body { font-family: 'Playfair Display', serif; margin: 0; padding: 0; }
-        .container { background-color: white; color: #333; }
-        h2 { color: #333; }
+        body { font-family: 'Playfair Display', serif; margin: 0; padding: 0; background-color: #222; }
+        .container { background-color: #3A3A3A; color: #e0e0e0; border: 1px solid #555; }
+        h2 { color: #e0e0e0; }
         .divider { background-color: #666; }
-        .image-container { border: 4px solid #eee; }
+        .image-container { border: 2px solid #555; }
       `;
       containerClass = 'classic-container';
-      imageClass = 'classic-image';
       break;
   }
   
@@ -70,12 +67,12 @@ export const generateHtml = ({
     .container {
       padding: 24px;
       width: 320px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      clip-path: polygon(0% 10%, 10% 0%, 90% 0%, 100% 10%, 100% 100%, 0% 100%);
     }
     .image-container {
       width: 96px;
@@ -95,14 +92,19 @@ export const generateHtml = ({
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #eee;
-      color: #999;
+      background-color: #555;
+      color: #ddd;
       font-size: 14px;
     }
     h2 {
       margin: 0 0 12px 0;
       font-size: 24px;
       font-weight: 700;
+    }
+    .birth-date {
+      margin: 0 0 12px 0;
+      font-size: 14px;
+      opacity: 0.8;
     }
     .divider {
       width: 64px;
@@ -115,6 +117,15 @@ export const generateHtml = ({
       font-size: 16px;
     }
   `;
+
+  // Format birth date if available
+  const formattedBirthDate = birthDate 
+    ? new Intl.DateTimeFormat('zh-CN', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      }).format(birthDate)
+    : null;
   
   const html = `
 <!DOCTYPE html>
@@ -131,13 +142,14 @@ export const generateHtml = ({
 </head>
 <body>
   <div class="container ${containerClass}">
-    <div class="image-container ${imageClass}">
+    <div class="image-container">
       ${imageUrl 
         ? `<img class="profile-image" src="${imageUrl}" alt="${name}" />`
         : `<div class="no-image">无图片</div>`
       }
     </div>
     <h2>${name || '姓名'}</h2>
+    ${formattedBirthDate ? `<div class="birth-date">${formattedBirthDate}</div>` : ''}
     <div class="divider"></div>
     <p>${epitaph || '这里将显示墓志铭内容...'}</p>
   </div>

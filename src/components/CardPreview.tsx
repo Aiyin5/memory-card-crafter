@@ -3,12 +3,15 @@ import React, { useRef } from 'react';
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import html2canvas from 'html2canvas';
+import { format } from 'date-fns';
+import { zhCN } from 'date-fns/locale';
 
 interface CardPreviewProps {
   name: string;
   epitaph: string;
   imageUrl: string | null;
   template: string;
+  birthDate: Date | undefined;
 }
 
 const CardPreview: React.FC<CardPreviewProps> = ({
@@ -16,6 +19,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({
   epitaph,
   imageUrl,
   template,
+  birthDate,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -37,14 +41,14 @@ const CardPreview: React.FC<CardPreviewProps> = ({
   const getImageStyles = () => {
     switch (template) {
       case 'modern':
-        return 'border-4 border-white';
+        return 'border-2 border-gray-600';
       case 'elegant':
-        return 'border-2 border-gray-800';
+        return 'border-2 border-gray-500';
       case 'minimal':
         return 'border-none shadow-lg';
       case 'classic':
       default:
-        return 'border-4 border-gray-200';
+        return 'border-2 border-gray-500';
     }
   };
 
@@ -68,13 +72,17 @@ const CardPreview: React.FC<CardPreviewProps> = ({
     }
   };
 
+  const formattedBirthDate = birthDate 
+    ? format(birthDate, 'yyyy年MM月dd日', { locale: zhCN })
+    : null;
+
   return (
     <div className="flex flex-col items-center">
       <div className="mb-4 text-lg font-medium">预览</div>
       
       <div
         ref={cardRef}
-        className={`${getTemplateClasses()} p-6 w-full max-w-xs mx-auto`}
+        className={`${getTemplateClasses()} p-6 w-full max-w-xs mx-auto shadow-lg`}
       >
         <div className="flex flex-col items-center space-y-4">
           {imageUrl ? (
@@ -86,18 +94,24 @@ const CardPreview: React.FC<CardPreviewProps> = ({
               />
             </div>
           ) : (
-            <div className={`w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center ${getImageStyles()}`}>
-              <span className="text-gray-400 text-xl">无图片</span>
+            <div className={`w-24 h-24 rounded-full bg-gray-500 flex items-center justify-center ${getImageStyles()}`}>
+              <span className="text-gray-300 text-xl">无图片</span>
             </div>
           )}
           
-          <h2 className={`text-xl font-serif font-bold ${template === 'classic' ? 'text-gray-800' : ''}`}>
+          <h2 className="text-xl font-serif font-bold">
             {name || '姓名'}
           </h2>
           
+          {formattedBirthDate && (
+            <p className="text-sm opacity-80">
+              {formattedBirthDate}
+            </p>
+          )}
+          
           <div className="w-16 h-0.5 bg-gray-400"></div>
           
-          <p className={`text-center font-serif ${template === 'classic' ? 'text-gray-700' : ''}`}>
+          <p className="text-center font-serif">
             {epitaph || '这里将显示墓志铭内容...'}
           </p>
         </div>
@@ -105,7 +119,7 @@ const CardPreview: React.FC<CardPreviewProps> = ({
       
       <Button
         onClick={handleDownload}
-        className="mt-6 flex items-center gap-2"
+        className="mt-6 flex items-center gap-2 bg-gray-700 hover:bg-gray-600"
         disabled={!name && !epitaph && !imageUrl}
       >
         <Download size={16} />

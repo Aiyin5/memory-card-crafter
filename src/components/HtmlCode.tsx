@@ -41,7 +41,7 @@ const HtmlCode: React.FC<HtmlCodeProps> = ({ htmlCode }) => {
           variant="outline"
           size="sm"
           onClick={handleCopy}
-          className="flex items-center gap-1"
+          className="flex items-center gap-1 bg-gray-700 hover:bg-gray-600 text-white"
         >
           {copied ? (
             <>
@@ -61,10 +61,10 @@ const HtmlCode: React.FC<HtmlCodeProps> = ({ htmlCode }) => {
         value={htmlCode}
         readOnly
         rows={6}
-        className="font-mono text-xs bg-gray-50"
+        className="font-mono text-xs bg-gray-800 text-gray-300"
       />
       
-      <p className="text-xs text-gray-500">
+      <p className="text-xs text-gray-400">
         您可以复制此HTML代码并嵌入到您的网站中。
       </p>
     </div>

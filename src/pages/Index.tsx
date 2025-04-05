@@ -16,6 +16,7 @@ const Index = () => {
   const [epitaph, setEpitaph] = useState('');
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [template, setTemplate] = useState('classic');
+  const [birthDate, setBirthDate] = useState<Date | undefined>(undefined);
   const [htmlCode, setHtmlCode] = useState('');
   const [activeTab, setActiveTab] = useState('edit');
 
@@ -26,41 +27,44 @@ const Index = () => {
       epitaph,
       imageUrl,
       template,
+      birthDate,
     });
     setHtmlCode(code);
-  }, [name, epitaph, imageUrl, template]);
+  }, [name, epitaph, imageUrl, template, birthDate]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6">
+    <div className="min-h-screen bg-gray-900 py-8 px-4 sm:px-6">
       <div className="max-w-md mx-auto">
         <header className="text-center mb-8">
-          <h1 className="text-3xl font-serif font-bold">墓志铭卡片生成器</h1>
-          <p className="text-gray-500 mt-2">创建并下载个性化的墓志铭卡片</p>
+          <h1 className="text-3xl font-serif font-bold text-gray-100">墓志铭卡片生成器</h1>
+          <p className="text-gray-400 mt-2">创建并下载个性化的墓志铭卡片</p>
         </header>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid grid-cols-3 mb-6">
+          <TabsList className="grid grid-cols-3 mb-6 bg-gray-800">
             <TabsTrigger value="edit">编辑</TabsTrigger>
             <TabsTrigger value="preview">预览</TabsTrigger>
             <TabsTrigger value="code">代码</TabsTrigger>
           </TabsList>
           
-          <Card>
+          <Card className="bg-gray-800 border-gray-700">
             <CardContent className="p-6">
               <TabsContent value="edit">
                 <ScrollArea className="h-[calc(100vh-280px)]">
                   <div className="space-y-6">
                     <ImageUpload onImageChange={setImageUrl} />
                     
-                    <Separator />
+                    <Separator className="bg-gray-700" />
                     
                     <CardForm
                       name={name}
                       epitaph={epitaph}
                       template={template}
+                      birthDate={birthDate}
                       setName={setName}
                       setEpitaph={setEpitaph}
                       setTemplate={setTemplate}
+                      setBirthDate={setBirthDate}
                     />
                     
                     <div className="flex justify-end space-x-2 pt-4">
@@ -71,11 +75,16 @@ const Index = () => {
                           setEpitaph('');
                           setImageUrl(null);
                           setTemplate('classic');
+                          setBirthDate(undefined);
                         }}
+                        className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
                       >
                         重置
                       </Button>
-                      <Button onClick={() => setActiveTab('preview')}>
+                      <Button 
+                        onClick={() => setActiveTab('preview')}
+                        className="bg-gray-700 hover:bg-gray-600"
+                      >
                         预览卡片
                       </Button>
                     </div>
@@ -90,13 +99,21 @@ const Index = () => {
                     epitaph={epitaph}
                     imageUrl={imageUrl}
                     template={template}
+                    birthDate={birthDate}
                   />
                   
                   <div className="flex justify-between mt-8">
-                    <Button variant="outline" onClick={() => setActiveTab('edit')}>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setActiveTab('edit')}
+                      className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+                    >
                       返回编辑
                     </Button>
-                    <Button onClick={() => setActiveTab('code')}>
+                    <Button 
+                      onClick={() => setActiveTab('code')}
+                      className="bg-gray-700 hover:bg-gray-600"
+                    >
                       查看代码
                     </Button>
                   </div>
@@ -108,7 +125,11 @@ const Index = () => {
                   <HtmlCode htmlCode={htmlCode} />
                   
                   <div className="flex justify-start mt-8">
-                    <Button variant="outline" onClick={() => setActiveTab('preview')}>
+                    <Button 
+                      variant="outline" 
+                      onClick={() => setActiveTab('preview')}
+                      className="bg-gray-700 hover:bg-gray-600 text-white border-gray-600"
+                    >
                       返回预览
                     </Button>
                   </div>
